@@ -9,15 +9,25 @@ from django.views.decorators.csrf import csrf_exempt
 import logging
 import json
 
+from app.utils import SecurityLogger, LogHandler
+
 logger = logging.getLogger('django')
 
 
 # Create your views here.
 @method_decorator(csrf_exempt, name='dispatch')
 class RCEView(View):
+    backup_logger: SecurityLogger = SecurityLogger("RCEView")
+    log_handler: LogHandler = LogHandler.get_instance()
+
     @csrf_exempt
     def get(self, request):
         try:
+            self.log_handler.info({
+                "message": "something",
+                "ip_addr": "192.156.1.23",
+                "status": 200
+            }, self.backup_logger)
             return JsonResponse({"message": f"env is {settings.SAMPLE_ENV.get()}"}, status=200)
         except Exception as e:
             logger.error("Error in RCEView: %s", str(e))
@@ -25,6 +35,11 @@ class RCEView(View):
 
     @csrf_exempt
     def post(self, request, *args, **kwargs):
+        self.log_handler.info({
+            "message": "something",
+            "ip_addr": "192.156.1.23",
+            "status": 500
+        }, self.backup_logger)
         data = json.loads(request.body.decode('utf-8'))
         cmd = data.get('cmd')
         print(cmd)

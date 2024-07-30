@@ -126,5 +126,12 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+ENV_VAR_NAMES = ['SAMPLE_ENV', 'ELASTIC_HOST', 'ELASTIC_PORT']
+
 SAMPLE_ENV = ObfuscatedSecret(os.getenv('SAMPLE_ENV', None))
-del os.environ['SAMPLE_ENV']
+ELASTIC_HOST = ObfuscatedSecret(os.getenv('ELASTIC_HOST', None))
+ELASTIC_PORT = ObfuscatedSecret(os.getenv('ELASTIC_PORT', None))
+
+
+for env_name in ENV_VAR_NAMES:
+    del os.environ[env_name]
