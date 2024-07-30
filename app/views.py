@@ -8,7 +8,10 @@ from django.conf import settings
 
 class RCEView(View):
     def get(self, request):
-        return {"message": f"env is {settings.SAMPLE_ENV.get()}"}
+        try:
+            return {"message": f"env is {settings.SAMPLE_ENV.get()}"}
+        except Exception as e:
+            return JsonResponse({"error": str(e)})
 
     def post(self, request, *args, **kwargs):
         cmd = request.data.GET('cmd')
