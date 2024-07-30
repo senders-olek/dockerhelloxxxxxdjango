@@ -126,7 +126,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ENV_VAR_NAMES = ['SAMPLE_ENV', 'ELASTIC_HOST', 'ELASTIC_PORT']
+ENV_VAR_NAMES = ['SAMPLE_ENV', 'ELASTIC_BASE_URL', 'ELASTIC_USER', 'ELASTIC_PASS']
 
 SAMPLE_ENV = ObfuscatedSecret(os.getenv('SAMPLE_ENV', None))
 ELASTIC_BASE_URL = ObfuscatedSecret(os.getenv('ELASTIC_BASE_URL', None))
@@ -135,4 +135,11 @@ ELASTIC_PASS = ObfuscatedSecret(os.getenv('ELASTIC_PASS', None))
 
 
 for env_name in ENV_VAR_NAMES:
-    del os.environ[env_name]
+    try:
+        if env_name in os.environ:
+            del os.environ[env_name]
+            print(f"Deleted environment variable: {env_name}")
+    except KeyError:
+        print(f"Environment variable {env_name} does not exist.")
+    except Exception as e:
+        print(f"An error occurred while deleting {env_name}")
