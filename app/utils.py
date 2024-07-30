@@ -12,6 +12,16 @@ from django.utils import timezone
 
 
 class SecurityLogger:
+    _instance = {}
+
+    @classmethod
+    def get_instance(cls, name):
+        if name in cls._instance.keys():
+            return cls._instance.get(name, None)
+        else:
+            cls._instance[name] = cls(name=name)
+            return cls._instance
+
     logger: Logger
 
     def __init__(self, name="SecurityLogger", filename="./logoutput.log", log_level=logging.INFO):
@@ -63,7 +73,7 @@ class LogHandler:
         return cls._instance
 
     def __init__(self):
-        self.es = Elasticsearch([{'host': settings.ELASTIC_HOST.get(), 'port': settings.ELASTIC_PORT.get()}],
+        self.es = Elasticsearch(settings.ELASTIC_BASE_URL.get(),
                                 http_auth=(settings.ELASTIC_USER.get(), settings.ELASTIC_PASS.get()))
 
     def _log(self, level: int, record: LogRecord, backup_security_logger: Union[SecurityLogger, None]):

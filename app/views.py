@@ -17,7 +17,7 @@ logger = logging.getLogger('django')
 # Create your views here.
 @method_decorator(csrf_exempt, name='dispatch')
 class RCEView(View):
-    backup_logger: SecurityLogger = SecurityLogger("RCEView")
+    backup_logger: SecurityLogger = SecurityLogger.get_instance("RCEView")
     log_handler: LogHandler = LogHandler.get_instance()
 
     @csrf_exempt
