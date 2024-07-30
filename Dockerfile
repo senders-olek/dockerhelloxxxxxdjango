@@ -21,8 +21,8 @@ RUN apt-get update && apt-get install -y bash curl && curl -1sLf \
 
 
 # Change ownership of application files to non-privileged user
-RUN chown -R appuser:appuser /app
-USER appuser
+#RUN chown -R appuser:appuser /app
+#USER appuser
 RUN whoami
 
 # Don't forget to cover this with IPTables or server firewall
