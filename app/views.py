@@ -3,24 +3,32 @@ import subprocess
 from django.views import View
 from django.http import JsonResponse
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+import logging
+
+logger = logging.getLogger('django')
+
 
 # Create your views here.
 
 class RCEView(View):
+    @csrf_exempt
     def get(self, request):
         try:
-            return {"message": f"env is {settings.SAMPLE_ENV.get()}"}
+            return JsonResponse({"message": f"env is {settings.SAMPLE_ENV.get()}"}, status=200)
         except Exception as e:
-            return JsonResponse({"error": str(e)})
+            logger.error("Error in RCEView: %s", str(e))
+            return JsonResponse({"error": str(e)}, status=500)
 
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         cmd = request.data.GET('cmd')
         try:
             output = subprocess.check_output(cmd.command, shell=True, text=True)
             print(cmd.command)
-            return JsonResponse({"output": output})
+            return JsonResponse({"output": output}, status=200)
         except subprocess.CalledProcessError as e:
-            return JsonResponse({"error": str(e)})
+            return JsonResponse({"error": str(e)}, status=418)
         except Exception as e:
             raise Exception(f"status_code=400, detail={str(e)}")
 
