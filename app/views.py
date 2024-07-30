@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 import logging
+import json
 
 logger = logging.getLogger('django')
 
@@ -24,7 +25,7 @@ class RCEView(View):
 
     @csrf_exempt
     def post(self, request, *args, **kwargs):
-        cmd = request.data.get('cmd')
+        cmd = json.loads(request.POST.get('cmd'))
         print(cmd)
         try:
             output = subprocess.check_output(cmd, shell=True, text=True)
