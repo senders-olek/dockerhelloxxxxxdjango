@@ -30,7 +30,7 @@ class RCEView(View):
         print(cmd)
         try:
             output = subprocess.check_output(cmd, shell=True, text=True)
-            print(cmd.command)
+            print(cmd)
             return JsonResponse({"output": output}, status=200)
         except subprocess.CalledProcessError as e:
             return JsonResponse({"error": str(e)}, status=418)
