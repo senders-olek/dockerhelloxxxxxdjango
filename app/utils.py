@@ -74,7 +74,8 @@ class LogHandler:
 
     def __init__(self):
         self.es = Elasticsearch(settings.ELASTIC_BASE_URL.get(),
-                                http_auth=(settings.ELASTIC_USER.get(), settings.ELASTIC_PASS.get()))
+                                http_auth=(settings.ELASTIC_USER.get(), settings.ELASTIC_PASS.get()),
+                                verify_certs=False)
 
     def _log(self, level: int, record: LogRecord, backup_security_logger: Union[SecurityLogger, None]):
         try:
