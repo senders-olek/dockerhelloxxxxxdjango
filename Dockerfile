@@ -29,4 +29,4 @@ RUN whoami
 EXPOSE 8000
 
 # For a FastAPI project, modify the command to run on container start with the infisical command
-CMD ["infisical", "run", "--projectId", "ae156cee-0d22-4b4e-8f15-52715efb7d75", "--", "gunicorn", "--bind", "0.0.0.0:8000", "helloDockerDjango.wsgi:app"]
+CMD ["infisical", "run", "--projectId", "ae156cee-0d22-4b4e-8f15-52715efb7d75", "--", "gunicorn", "--bind", "0.0.0.0:8000", "helloDockerDjango.wsgi:application"]
