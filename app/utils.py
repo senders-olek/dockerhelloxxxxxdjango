@@ -63,7 +63,7 @@ class LogHandler:
     Singleton class linking to Elasticsearch
     """
     _instance = None
-    _index_name = 'HELLO_DOCKER_DJANGO'
+    _index_name = 'hello_docker_django'
     es: Elasticsearch
 
     @classmethod
