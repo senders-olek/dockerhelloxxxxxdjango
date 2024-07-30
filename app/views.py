@@ -1,5 +1,7 @@
 from django.shortcuts import render
 import subprocess
+
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.http import JsonResponse
 from django.conf import settings
@@ -10,7 +12,7 @@ logger = logging.getLogger('django')
 
 
 # Create your views here.
-
+@method_decorator(csrf_exempt, name='dispatch')
 class RCEView(View):
     @csrf_exempt
     def get(self, request):
