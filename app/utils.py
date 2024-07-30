@@ -20,7 +20,7 @@ class SecurityLogger:
             return cls._instance.get(name, None)
         else:
             cls._instance[name] = cls(name=name)
-            return cls._instance
+            return cls._instance.get(name)
 
     logger: Logger
 
