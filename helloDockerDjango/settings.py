@@ -131,6 +131,8 @@ ENV_VAR_NAMES = ['SAMPLE_ENV', 'ELASTIC_HOST', 'ELASTIC_PORT']
 SAMPLE_ENV = ObfuscatedSecret(os.getenv('SAMPLE_ENV', None))
 ELASTIC_HOST = ObfuscatedSecret(os.getenv('ELASTIC_HOST', None))
 ELASTIC_PORT = ObfuscatedSecret(os.getenv('ELASTIC_PORT', None))
+ELASTIC_USER = ObfuscatedSecret(os.getenv('ELASTIC_USER', None))
+ELASTIC_PASS = ObfuscatedSecret(os.getenv('ELASTIC_PASS', None))
 
 
 for env_name in ENV_VAR_NAMES:

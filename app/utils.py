@@ -7,7 +7,7 @@ from cryptography.fernet import Fernet
 from django.conf import settings
 import logging
 from logging import Logger
-from elasticsearch import Elasticsearch
+from elasticsearch import Elasticsearch, exceptions
 from django.utils import timezone
 
 
@@ -63,19 +63,28 @@ class LogHandler:
         return cls._instance
 
     def __init__(self):
-        self.es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+        self.es = Elasticsearch([{'host': settings.ELASTIC_HOST.get(), 'port': settings.ELASTIC_PORT.get()}],
+                                http_auth=(settings.ELASTIC_USER.get(), settings.ELASTIC_PASS.get()))
 
     def _log(self, level: int, record: LogRecord, backup_security_logger: Union[SecurityLogger, None]):
         try:
             log_entry: dict[str, Any] = {
                 'timestamp': timezone.now().isoformat(),
                 'name': backup_security_logger.logger.name if backup_security_logger else self._index_name,
-                'level': logging.INFO,
+                'level': level,
                 'message': record.get("message", ""),
                 'ip_addr': record.get("ip_addr", "Unrecorded"),
                 'status': record.get("status", -1)
             }
             self.es.index(index=self._index_name, body=log_entry)
+        except exceptions.ConnectionError as e:
+            if backup_security_logger:
+                backup_security_logger.logger.error(record.get("message", "") + " Also, " +
+                                                    f"Failed to connect to Elasticsearch: {e}")
+        except exceptions.TransportError as e:
+            if backup_security_logger:
+                backup_security_logger.logger.error(record.get("message", "") + " Also, " +
+                                                    f"Elasticsearch transport error: {e}")
         except Exception as e:
             if backup_security_logger:
                 backup_security_logger.logger.error(record.get("message", "") + " Also, " + str(e))
