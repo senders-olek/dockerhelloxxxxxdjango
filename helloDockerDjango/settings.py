@@ -138,7 +138,7 @@ ELASTIC_APM_SECRET_TOKEN = ObfuscatedSecret(os.getenv('ELASTIC_APM_SECRET_TOKEN'
 ELASTIC_APM = {
     'SERVICE_NAME': 'Django-Service',
     'SERVER_URL': os.getenv('ELASTIC_BASE_URL', None),
-    'ELASTIC_APM_SECRET_TOKEN': os.getenv('ELASTIC_APM_SECRET_TOKEN', None),
+    'SECRET_TOKEN': os.getenv('ELASTIC_APM_SECRET_TOKEN', None),
     # 'USERNAME': os.getenv('ELASTIC_USER', None),
     # 'PASSWORD': os.getenv('ELASTIC_PASS', None),
     # 'VERIFY_SERVER_CERT': False,  # Set to True in production with proper SSL setup
