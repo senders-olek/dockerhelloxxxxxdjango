@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'elasticapm.contrib.django.middleware.TracingMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -127,12 +128,12 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ENV_VAR_NAMES = ['SAMPLE_ENV', 'ELASTIC_BASE_URL', 'ELASTIC_APM_SECRET_TOKEN']
+ENV_VAR_NAMES = ['SAMPLE_ENV', 'ELASTIC_BASE_URL', 'ELASTIC_APM_SECRET_TOKEN', 'ELASTIC_USER', 'ELASTIC_PASS']
 
 SAMPLE_ENV = ObfuscatedSecret(os.getenv('SAMPLE_ENV', None))
 ELASTIC_BASE_URL = ObfuscatedSecret(os.getenv('ELASTIC_BASE_URL', None))
-# ELASTIC_USER = ObfuscatedSecret(os.getenv('ELASTIC_USER', None))
-# ELASTIC_PASS = ObfuscatedSecret(os.getenv('ELASTIC_PASS', None))
+ELASTIC_USER = ObfuscatedSecret(os.getenv('ELASTIC_USER', None))
+ELASTIC_PASS = ObfuscatedSecret(os.getenv('ELASTIC_PASS', None))
 ELASTIC_APM_SECRET_TOKEN = ObfuscatedSecret(os.getenv('ELASTIC_APM_SECRET_TOKEN', None))
 
 ELASTIC_APM = {
