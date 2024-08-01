@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'elasticapm.contrib.django'
 ]
 
 MIDDLEWARE = [
@@ -126,12 +127,22 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ENV_VAR_NAMES = ['SAMPLE_ENV', 'ELASTIC_BASE_URL', 'ELASTIC_USER', 'ELASTIC_PASS']
+ENV_VAR_NAMES = ['SAMPLE_ENV', 'ELASTIC_BASE_URL', 'ELASTIC_APM_SECRET_TOKEN']
 
 SAMPLE_ENV = ObfuscatedSecret(os.getenv('SAMPLE_ENV', None))
 ELASTIC_BASE_URL = ObfuscatedSecret(os.getenv('ELASTIC_BASE_URL', None))
-ELASTIC_USER = ObfuscatedSecret(os.getenv('ELASTIC_USER', None))
-ELASTIC_PASS = ObfuscatedSecret(os.getenv('ELASTIC_PASS', None))
+# ELASTIC_USER = ObfuscatedSecret(os.getenv('ELASTIC_USER', None))
+# ELASTIC_PASS = ObfuscatedSecret(os.getenv('ELASTIC_PASS', None))
+ELASTIC_APM_SECRET_TOKEN = ObfuscatedSecret(os.getenv('ELASTIC_APM_SECRET_TOKEN', None))
+
+ELASTIC_APM = {
+    'SERVICE_NAME': 'Django-Service',
+    'SERVER_URL': os.getenv('ELASTIC_BASE_URL', None),
+    'ELASTIC_APM_SECRET_TOKEN': os.getenv('ELASTIC_APM_SECRET_TOKEN', None),
+    # 'USERNAME': os.getenv('ELASTIC_USER', None),
+    # 'PASSWORD': os.getenv('ELASTIC_PASS', None),
+    # 'VERIFY_SERVER_CERT': False,  # Set to True in production with proper SSL setup
+}
 
 
 for env_name in ENV_VAR_NAMES:
