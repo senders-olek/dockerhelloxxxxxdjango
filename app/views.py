@@ -21,6 +21,11 @@ class RCEView(View):
     log_handler: LogHandler = LogHandler.get_instance()
 
     @csrf_exempt
+    def delete(self, request):
+        raise Exception("Not implemented correctly")
+
+
+    @csrf_exempt
     def get(self, request):
         try:
             self.log_handler.info({
